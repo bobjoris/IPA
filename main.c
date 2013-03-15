@@ -5,18 +5,20 @@
  * Created on 15 mars 2013, 15:42
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "header/main.h"
 
 /*
  * 
  */
 int main(int argc, char** argv) {
-
-
-    BinaryTreeTest();
+    
+    SDL_Surface *screen;
+    
+    initSDLWindow(screen);
+    
+    pause(); 
+  
+    SDL_Quit(); 
     
     return (EXIT_SUCCESS);
 }
@@ -40,3 +42,37 @@ void BinaryTreeTest()
 
 }
 
+
+void initSDLWindow(SDL_Surface *screen)
+{
+        SDL_Init(SDL_INIT_VIDEO); 
+  
+    screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE);
+    
+    if (screen == NULL) 
+    {
+        fprintf(stderr, "Impossible de charger le mode vidéo : %s\n", SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
+    
+    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 255, 255));
+    SDL_Flip(screen);
+    
+    SDL_WM_SetCaption("IPA : Rotation sur les Arbres Binaires", NULL);
+}
+
+void pause()
+{
+    int continuer = 1;
+    SDL_Event event;
+  
+    while (continuer)
+    {
+        SDL_WaitEvent(&event);
+        switch(event.type)
+        {
+            case SDL_QUIT:
+                continuer = 0;
+        }
+    }
+}

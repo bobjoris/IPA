@@ -11,10 +11,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL/SDL.h>
 #include "utils.h"
 #include "binarytree.h"
 
 void BinaryTreeTest();
+void initSDLWindow(SDL_Surface*);
+void pause();
 
 #endif	/* MAIN_H */
 
