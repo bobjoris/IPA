@@ -14,9 +14,10 @@
 #include <SDL/SDL.h>
 #include "utils.h"
 #include "binarytree.h"
+#include "binarytree_sdl.h"
 
-void BinaryTreeTest();
-void initSDLWindow(SDL_Surface*);
+BinaryTree* BinaryTreeTest();
+SDL_Surface* initSDLWindow();
 void pause();
 
 #endif	/* MAIN_H */
