@@ -3,6 +3,11 @@
 #define M_PI 3.14159265358979323846
 #define SGN(x) ((x)>0 ? 1 : ((x)==0 ? 0:(-1)))
 
+void clearScreen(SDL_Surface *surface)
+{
+    SDL_FillRect(surface, NULL, 0xfffffff);
+}
+
 void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSize, int offsetCoeff)
 {   
     
@@ -142,7 +147,7 @@ void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pix
     }
 }
 
-void AnimOneNode(SDL_Surface *surface, int radius, Uint32 pixel, int node, int x1, int y1, int x2, int y2){
+/*void AnimOneNode(SDL_Surface *surface, int radius, Uint32 pixel, int node, int x1, int y1, int x2, int y2){
 	int x=x1;
 	int y=y1;
 	float p=(y2-y1)/(x2-x1);//pente entre les deux points
@@ -195,6 +200,4 @@ void printAnim2nodes (int node, BinaryTree tree1, BinaryTree tree2){
 	int x2=getPosition(node,tree2);
 	int y2=getPosition(node,tree2);
 	AnimOneNode(surface, radius, pixel, node, x1, y1, x2, y2);
-}
-
-
+}*/

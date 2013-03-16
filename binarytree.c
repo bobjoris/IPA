@@ -98,8 +98,6 @@ Bool isBTree(BinaryTree* tree)
     int sizeLeft = height(leftChild(tree));
     int sizeRight = height(rightChild(tree));
     
-    printf("(%d - %d) = %d\n", sizeLeft, sizeRight, abs(sizeLeft - sizeRight));
-    
     return abs(sizeLeft - sizeRight) <= 1 && isBTree(leftChild(tree)) && isBTree(rightChild(tree));
 }
 
@@ -129,6 +127,18 @@ int height(BinaryTree* tree)
         return 1 + (max(height(leftChild(tree)), height(rightChild(tree))));
 }
 
+
+BinaryTree* transformBTree(BinaryTree *tree)
+{
+    while(isBTree(tree) !=  1)
+    {
+        tree->Left = rotate(tree->Left);
+        tree->Right = rotate(tree->Right);
+        tree = rotate(tree);
+    }
+    
+    return tree;
+}
 
 /*
  * Affichage préfixé
@@ -181,6 +191,7 @@ BinaryTree* rotateLeft(BinaryTree *tree)
     }
     return tree;
 }
+
 BinaryTree* rotateRight(BinaryTree *tree)
 {
     BinaryTree *pivot = tree->Left;

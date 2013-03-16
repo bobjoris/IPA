@@ -19,7 +19,8 @@ int main(int argc, char** argv) {
     
 
     screen = initSDLWindow();
-    drawTree(screen, tree, 500, 50, 30, height(tree));
+    drawTree(screen, tree, 600, 50, 30, height(tree));
+    
     SDL_Flip(screen);
     pause(); 
   
@@ -33,8 +34,15 @@ BinaryTree* BinaryTreeTest()
 {
     BinaryTree *treeL, *treeR, *tree;
     
-/*
-    treeL = createNode(17);
+    
+    int i=0;
+    tree = insertNode(1, NULL);
+    for(i = 2; i < 10; i++)
+    {
+        tree = insertNode(i, tree);
+    }
+
+    /*treeL = createNode(17);
     treeL->Left = createNode(9);
     treeL->Left->Right = createNode(14);
     treeL->Left->Right->Left = createNode(12);
@@ -43,26 +51,24 @@ BinaryTree* BinaryTreeTest()
     treeR->Left = createNode(54);
     treeR->Left->Right = createNode(72);
     
-    tree = createNodeWithChilds(treeL, 50, treeR);
-    printf("%d\n", height(tree));
-    preorderTraversal(tree);
-*/
+    tree = createNodeWithChilds(treeL, 50, treeR); */
     
-    tree = insertNode(7, NULL);
+   /* tree = insertNode(7, NULL); 
     
 
     tree = insertNode(9, tree);
 
     tree = insertNode(14, tree);
-    printf("%d\n%d\n", height(leftChild(tree)), height(rightChild(tree)));
     tree = insertNode(12, tree);
     tree = insertNode(76, tree);
     tree = insertNode(54, tree);
     tree = insertNode(72, tree);
-    tree = insertNode(50, tree); 
+    tree = insertNode(50, tree); */
     
-
+    printf("%d\n", isBTree(tree));
     preorderTraversal(tree);
+    
+    tree = transformBTree(tree);
 
     return tree;
 }
@@ -74,7 +80,7 @@ SDL_Surface* initSDLWindow()
     
     SDL_Init(SDL_INIT_VIDEO); 
   
-    screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE);
+    screen = SDL_SetVideoMode(1300, 768, 32, SDL_HWSURFACE);
     
     if (screen == NULL) 
     {

@@ -15,13 +15,23 @@
 #include "utils.h"
 #include "binarytree.h"
 
+/*
+ * Gestion de l'affichage graphique des arbres
+ */
 
+// Permet de vider l'écran
+void clearScreen(SDL_Surface *surface);
+
+// Dessine un arbre
 void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSize, int offsetCoeff);
 
+// Inscrit un pixel sur la surface
 void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 
+// Dessine une ligne du point (x1,y1) au point (x2,y2) sur la surface
 void drawLine(SDL_Surface *surface, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 color);
 
+// Dessine un cercle sur la surface
 void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pixel);
 
 #endif	/* BINARYTREE_SDL_H */

@@ -15,31 +15,66 @@
 typedef struct BinaryTree_
 {
     int value;
-    int height;
     struct BinaryTree_ *Left;
     struct BinaryTree_ *Right;
 }BinaryTree;
 
+/*
+ * Création / Insertion de noeuds
+ */
+// Crée un noeud avec la valeur passé en paramètre
 BinaryTree* createNode(int val);
+// Crée un noedu avec deux fils passé en paramètre
 BinaryTree* createNodeWithChilds(BinaryTree *left, int val, BinaryTree *right);
+// Insère un noeud dans l'arbre passé en paramètre
 BinaryTree* insertNode(int val, BinaryTree *tree);
 
+
+/*
+ * Accesseurs
+ */
+// Fils gauche et droit
 BinaryTree* leftChild(BinaryTree *tree);
 BinaryTree* rightChild(BinaryTree *tree);
 
+// Valeur du noeud
 int nodeValue(BinaryTree *tree);
+
+// La différence entre la hauteur du fils droit et du fils gauche
 int nodeDifference(BinaryTree *tree);
 
+/*
+ * Vérificateur
+ */
+// Vérifie si l'arbre est vide
 Bool isEmpty(BinaryTree *tree);
+// Vérifie si l'arbre est équilibré
 Bool isBTree(BinaryTree *tree);
+// Vérifie si l'arbre est une feuille
 Bool isLeaf(BinaryTree *tree);
 
+// Calcul de la hauteur de l'arbre
 int height(BinaryTree *tree);
 
+/*
+ * Affichage de l'arbre
+ */
+// Affiche préfixé
 void preorderTraversal(BinaryTree  *tree);
 
+/*
+ * Rotations
+ */
+
+// Transforme un arbre binaire, en un arbre binaire 
+BinaryTree* transformBTree(BinaryTree *tree);
+
+// Définit la rotation à appliquer
 BinaryTree* rotate(BinaryTree *tree);
+
+// Effectue une rotation gauche
 BinaryTree* rotateLeft(BinaryTree *tree);
+// Effectue une rotation droite
 BinaryTree* rotateRight(BinaryTree *tree);
 
 
