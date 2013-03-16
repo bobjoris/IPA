@@ -17,20 +17,25 @@ void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSi
     font = TTF_OpenFont("font.ttf", 13);
     sprintf(strNodeValue, "%d", nodeValue(tree));
     texte = TTF_RenderText_Blended(font, strNodeValue, blackColor);
-    position.x = x; position.y = y;
+    position.x = x - 5; position.y = y - 15;
+    //Affichage du texte
+    SDL_BlitSurface(texte, NULL, surface, &position); 
+    
+    position.y += 15;
+    sprintf(strNodeValue, "%d", nodeDifference(tree));
+    texte = TTF_RenderText_Blended(font, strNodeValue, blackColor);
+     SDL_BlitSurface(texte, NULL, surface, &position); 
     
     // Calcul du déport des cercles des enfants
     int offset = circleSize + ((circleSize / 2) * offsetCoeff);
     
     // Sélection de la couleur et affichage du cercle
     Uint32 color = SDL_MapRGB(surface->format, 0, 0, 0);
-    draw_circle(surface, x, y, circleSize, color);
-
-    //Affichage du texte
-    SDL_BlitSurface(texte, NULL, surface, &position); 
+    drawCircle(surface, x, y, circleSize, color);
     
     if(leftChild(tree) != NULL)
     {
+        // Calcul des coordonnées de l'arete
         float x1 = x + (circleSize) * cos(120 * (M_PI / 180));
         float y1 = y + (circleSize) * sin(120 * (M_PI / 180));
         float x2 = (x - offset) + (circleSize) * cos(300 * (M_PI / 180));
@@ -40,6 +45,7 @@ void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSi
     }
     if(rightChild(tree) != NULL)
     {
+        // Calcul des coordonnées de l'arete
         float x1 = x + (circleSize) * cos(60 * (M_PI / 180));
         float y1 = y + (circleSize) * sin(60 * (M_PI / 180));
         float x2 = (x + offset) + (circleSize) * cos(250 * (M_PI / 180));
@@ -49,7 +55,7 @@ void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSi
     }
 }
 
-void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
     Uint8 *target_pixel = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
     *(Uint32 *)target_pixel = pixel;
@@ -68,7 +74,7 @@ void drawLine(SDL_Surface *surface, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, 
   if (sh_delta < lg_delta) {
     cycle = lg_delta >> 1;
     while (x1 != x2) {
-      set_pixel(surface, x1, y1, color);
+      setPixel(surface, x1, y1, color);
       cycle += sh_delta;
       if (cycle > lg_delta) {
 	cycle -= lg_delta;
@@ -76,11 +82,11 @@ void drawLine(SDL_Surface *surface, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, 
       }
       x1 += lg_step;
     }
-    set_pixel(surface, x1, y1, color);
+    setPixel(surface, x1, y1, color);
   }
   cycle = sh_delta >> 1;
   while (y1 != y2) {
-    set_pixel(surface, x1, y1, color);
+    setPixel(surface, x1, y1, color);
     cycle += lg_delta;
     if (cycle > sh_delta) {
       cycle -= sh_delta;
@@ -88,10 +94,10 @@ void drawLine(SDL_Surface *surface, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, 
     }
     y1 += sh_step;
   }
-  set_pixel(surface, x1, y1, color);
+  setPixel(surface, x1, y1, color);
 }
 
-void draw_circle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pixel)
+void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pixel)
 {
     double error = (double)-radius;
     double x = (double)radius -0.5;
@@ -101,25 +107,25 @@ void draw_circle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pi
  
     while (x >= y)
     {
-        set_pixel(surface, (int)(cx + x), (int)(cy + y), pixel);
-        set_pixel(surface, (int)(cx + y), (int)(cy + x), pixel);
+        setPixel(surface, (int)(cx + x), (int)(cy + y), pixel);
+        setPixel(surface, (int)(cx + y), (int)(cy + x), pixel);
  
         if (x != 0)
         {
-            set_pixel(surface, (int)(cx - x), (int)(cy + y), pixel);
-            set_pixel(surface, (int)(cx + y), (int)(cy - x), pixel);
+            setPixel(surface, (int)(cx - x), (int)(cy + y), pixel);
+            setPixel(surface, (int)(cx + y), (int)(cy - x), pixel);
         }
  
         if (y != 0)
         {
-            set_pixel(surface, (int)(cx + x), (int)(cy - y), pixel);
-            set_pixel(surface, (int)(cx - y), (int)(cy + x), pixel);
+            setPixel(surface, (int)(cx + x), (int)(cy - y), pixel);
+            setPixel(surface, (int)(cx - y), (int)(cy + x), pixel);
         }
  
         if (x != 0 && y != 0)
         {
-            set_pixel(surface, (int)(cx - x), (int)(cy - y), pixel);
-            set_pixel(surface, (int)(cx - y), (int)(cy - x), pixel);
+            setPixel(surface, (int)(cx - x), (int)(cy - y), pixel);
+            setPixel(surface, (int)(cx - y), (int)(cy - x), pixel);
         }
  
         error += y;

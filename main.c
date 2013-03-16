@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     tree = BinaryTreeTest();
     
     screen = initSDLWindow();
-    drawTree(screen, tree, 500, 40, 30, height(tree));
+    drawTree(screen, tree, 500, 50, 40, height(tree));
     SDL_Flip(screen);
     pause(); 
   

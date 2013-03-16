@@ -18,11 +18,11 @@
 
 void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSize, int offsetCoeff);
 
-void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
+void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 
 void drawLine(SDL_Surface *surface, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 color);
 
-void draw_circle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pixel);
+void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pixel);
 
 #endif	/* BINARYTREE_SDL_H */
 
