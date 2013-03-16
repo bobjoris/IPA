@@ -48,6 +48,19 @@ BinaryTree* createNodeWithChilds(BinaryTree *left, int val, BinaryTree *right)
 }
 
 
+BinaryTree* insertNode(int val, BinaryTree *tree)
+{
+    if(tree == NULL)
+        return createNodeWithChilds(NULL, val, NULL);
+    
+    if(val <= nodeValue(tree))
+        tree->Left = insertNode(val, tree->Left);
+    else if(val > nodeValue(tree))
+        tree->Right = insertNode(val, tree->Right);
+    
+    return rotate(tree);
+}
+
 /*
  * Accesseurs
  */
@@ -60,7 +73,7 @@ int nodeValue(BinaryTree *tree)
 // Renvoie la différence de hauteur entre le fils droit et le fils gauche
 int nodeDifference(BinaryTree *tree)
 {
-    return abs(height(rightChild(tree)) - height(leftChild(tree)));
+    return height(rightChild(tree)) - height(leftChild(tree));
 }
 
 BinaryTree* leftChild(BinaryTree *tree)
@@ -133,19 +146,49 @@ void preorderTraversal(BinaryTree  *tree)
 }
 
 
+BinaryTree* rotate(BinaryTree *tree)
+{
+    int nodeDiff = nodeDifference(tree);
+    if(nodeDiff == -2)
+    {
+        BinaryTree *left = leftChild(tree);
+        if(height(leftChild(left)) < height(rightChild(left)))
+            tree->Left = rotateLeft(tree->Left);
+        
+        return rotateRight(tree);
+    }
+    
+    if(nodeDiff == 2)
+    {
+         BinaryTree *right = rightChild(tree);
+        if(height(leftChild(right)) > height(rightChild(right)))
+            tree->Right = rotateRight(tree->Right);
+        
+        return rotateLeft(tree);
+    }
+    
+    return tree;
+}
+
 BinaryTree* rotateLeft(BinaryTree *tree)
 {
-    BinaryTree *b = rightChild(tree);
-    tree->Right = leftChild(b);
-    b->Left = tree;
-    
-    return b;
+    BinaryTree *pivot = tree->Right;
+    if(pivot != NULL)
+    {
+        tree->Right = pivot->Left;
+        pivot->Left = tree;
+        tree = pivot;
+    }
+    return tree;
 }
 BinaryTree* rotateRight(BinaryTree *tree)
 {
-    BinaryTree* b = leftChild(tree);
-    tree->Left = rightChild(b);
-    b->Right = tree;
-    
-    return b;
+    BinaryTree *pivot = tree->Left;
+    if(pivot != NULL)
+    {
+    tree->Left = pivot->Right;
+    pivot->Right = tree;
+    tree = pivot;
+    }
+    return tree;
 }

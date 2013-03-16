@@ -27,7 +27,8 @@ void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSi
      SDL_BlitSurface(texte, NULL, surface, &position); 
     
     // Calcul du déport des cercles des enfants
-    int offset = circleSize + ((circleSize / 2) * offsetCoeff);
+    int xOffset = circleSize + abs((circleSize * 2) * offsetCoeff);
+    int yOffset = circleSize + abs((circleSize / 2) * offsetCoeff);
     
     // Sélection de la couleur et affichage du cercle
     Uint32 color = SDL_MapRGB(surface->format, 0, 0, 0);
@@ -38,20 +39,20 @@ void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSi
         // Calcul des coordonnées de l'arete
         float x1 = x + (circleSize) * cos(120 * (M_PI / 180));
         float y1 = y + (circleSize) * sin(120 * (M_PI / 180));
-        float x2 = (x - offset) + (circleSize) * cos(300 * (M_PI / 180));
-        float y2 = (y + offset) + (circleSize) * sin(300 * (M_PI / 180));
+        float x2 = (x - xOffset) + (circleSize) * cos(300 * (M_PI / 180));
+        float y2 = (y + yOffset) + (circleSize) * sin(300 * (M_PI / 180));
         drawLine(surface, (int) x1, (int) y1, (int)x2, (int)y2, color);
-        drawTree(surface, leftChild(tree), x - offset, y + offset, circleSize, offsetCoeff - 1);
+        drawTree(surface, leftChild(tree), x - xOffset, y + yOffset, circleSize, offsetCoeff - 1);
     }
     if(rightChild(tree) != NULL)
     {
         // Calcul des coordonnées de l'arete
         float x1 = x + (circleSize) * cos(60 * (M_PI / 180));
         float y1 = y + (circleSize) * sin(60 * (M_PI / 180));
-        float x2 = (x + offset) + (circleSize) * cos(250 * (M_PI / 180));
-        float y2 = (y + offset) + (circleSize) * sin(250 * (M_PI / 180));
+        float x2 = (x + xOffset) + (circleSize) * cos(250 * (M_PI / 180));
+        float y2 = (y + yOffset) + (circleSize) * sin(250 * (M_PI / 180));
         drawLine(surface, (int) x1, (int) y1, (int)x2, (int)y2, color);
-        drawTree(surface, rightChild(tree), x + offset, y + offset, circleSize, offsetCoeff - 1);
+        drawTree(surface, rightChild(tree), x + xOffset, y + yOffset, circleSize, offsetCoeff - 1);
     }
 }
 

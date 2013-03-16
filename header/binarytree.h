@@ -22,6 +22,7 @@ typedef struct BinaryTree_
 
 BinaryTree* createNode(int val);
 BinaryTree* createNodeWithChilds(BinaryTree *left, int val, BinaryTree *right);
+BinaryTree* insertNode(int val, BinaryTree *tree);
 
 BinaryTree* leftChild(BinaryTree *tree);
 BinaryTree* rightChild(BinaryTree *tree);
@@ -37,7 +38,7 @@ int height(BinaryTree *tree);
 
 void preorderTraversal(BinaryTree  *tree);
 
-void rotate(BinaryTree *tree);
+BinaryTree* rotate(BinaryTree *tree);
 BinaryTree* rotateLeft(BinaryTree *tree);
 BinaryTree* rotateRight(BinaryTree *tree);
 

@@ -17,12 +17,14 @@ int main(int argc, char** argv) {
     
     tree = BinaryTreeTest();
     
+
     screen = initSDLWindow();
-    drawTree(screen, tree, 500, 50, 40, height(tree));
+    drawTree(screen, tree, 500, 50, 30, height(tree));
     SDL_Flip(screen);
     pause(); 
   
     SDL_Quit(); 
+
     
     return (EXIT_SUCCESS);
 }
@@ -31,6 +33,7 @@ BinaryTree* BinaryTreeTest()
 {
     BinaryTree *treeL, *treeR, *tree;
     
+/*
     treeL = createNode(17);
     treeL->Left = createNode(9);
     treeL->Left->Right = createNode(14);
@@ -42,6 +45,23 @@ BinaryTree* BinaryTreeTest()
     
     tree = createNodeWithChilds(treeL, 50, treeR);
     printf("%d\n", height(tree));
+    preorderTraversal(tree);
+*/
+    
+    tree = insertNode(7, NULL);
+    
+
+    tree = insertNode(9, tree);
+
+    tree = insertNode(14, tree);
+    printf("%d\n%d\n", height(leftChild(tree)), height(rightChild(tree)));
+    tree = insertNode(12, tree);
+    tree = insertNode(76, tree);
+    tree = insertNode(54, tree);
+    tree = insertNode(72, tree);
+    tree = insertNode(50, tree); 
+    
+
     preorderTraversal(tree);
 
     return tree;
