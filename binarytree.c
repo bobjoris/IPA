@@ -132,8 +132,8 @@ BinaryTree* transformBTree(BinaryTree *tree)
 {
     while(isBTree(tree) !=  1)
     {
-        tree->Left = rotate(tree->Left);
-        tree->Right = rotate(tree->Right);
+        tree->Left = transformBTree(tree->Left);
+        tree->Right = transformBTree(tree->Right);
         tree = rotate(tree);
     }
     

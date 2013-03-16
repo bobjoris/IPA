@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     
 
     screen = initSDLWindow();
-    drawTree(screen, tree, 600, 50, 30, height(tree));
+    drawTree(screen, tree, 700, 50, 30, height(tree));
     
     SDL_Flip(screen);
     pause(); 
@@ -35,23 +35,26 @@ BinaryTree* BinaryTreeTest()
     BinaryTree *treeL, *treeR, *tree;
     
     
-    int i=0;
+   /* int i=0;
     tree = insertNode(1, NULL);
     for(i = 2; i < 10; i++)
     {
         tree = insertNode(i, tree);
-    }
+    } */
 
-    /*treeL = createNode(17);
+    treeL = createNode(17);
     treeL->Left = createNode(9);
     treeL->Left->Right = createNode(14);
     treeL->Left->Right->Left = createNode(12);
+    treeL->Right = createNode(23);
+    treeL->Right->Left = createNode(19);
     
     treeR = createNode(76);
     treeR->Left = createNode(54);
     treeR->Left->Right = createNode(72);
+    treeR->Left->Right->Left = createNode(67);
     
-    tree = createNodeWithChilds(treeL, 50, treeR); */
+    tree = createNodeWithChilds(treeL, 50, treeR);
     
    /* tree = insertNode(7, NULL); 
     
