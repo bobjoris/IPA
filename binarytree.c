@@ -61,6 +61,28 @@ BinaryTree* insertNode(int val, BinaryTree *tree)
     return rotate(tree);
 }
 
+BinaryTree* deleteLeaf(int val, BinaryTree *tree)
+{
+    BinaryTree *res=NULL;
+	res = malloc(sizeof(BinaryTree));
+	if((haveNode(val,tree))&&(isLeafInTree(val,tree)))
+	{
+		if(nodeValue(tree)==val)
+		{
+			res=NULL;		
+		}
+		else
+		{
+			res=CreateNodeWithChilds(deleteLeaf(val,leftChild(tree)),nodeValue(tree),deleteLeaf(val,rightChild(tree)));
+		}
+	}
+	else
+	{
+		return tree;
+	}
+	return res;
+}
+
 /*
  * Accesseurs
  */
@@ -90,6 +112,56 @@ BinaryTree* rightChild(BinaryTree *tree)
 /*
  * Vérificateur
  */
+ 
+Bool haveNode(int val, BinaryTree* tree)
+{
+    Bool res;
+	if(isLeaf(tree))
+	{
+		if(nodeValue(tree)==val)
+		{
+			res=TRUE;
+		}
+		else 
+		{
+			res=FALSE;
+		}
+	}
+	else
+	{
+		if(nodeValue(tree)==val)
+		{
+			res=TRUE;
+		}
+		else
+		{
+			res=(haveNode(val,rightChild(tree)))||(haveNode(val,leftChild(tree)));
+		}
+	}
+	return res;
+} 
+
+Bool isLeafInTree(int val, BinaryTree* tree)
+{
+	Bool res;
+	if(isLeaf(tree))
+	{
+		if(nodeValue(tree)==val)
+		{
+			res=TRUE;
+		}
+		else
+		{
+			res=FALSE;
+		}
+	}
+	else
+	{
+		res=(isLeafInTree(val,rightChild(tree)))||(isLeafInTree(val,leftChild(tree)));
+	}
+	return res;	
+}  
+ 
 Bool isBTree(BinaryTree* tree)
 {
      if(isLeaf(tree))
