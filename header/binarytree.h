@@ -28,6 +28,8 @@ BinaryTree* createNode(int val);
 BinaryTree* createNodeWithChilds(BinaryTree *left, int val, BinaryTree *right);
 // Insère un noeud dans l'arbre passé en paramètre
 BinaryTree* insertNode(int val, BinaryTree *tree);
+// Supprime une feuille dans un arbre
+BinaryTree* deleteLeaf(int val, BinaryTree *tree);
 
 
 /*
@@ -46,6 +48,10 @@ int nodeDifference(BinaryTree *tree);
 /*
  * Vérificateur
  */
+// Verifie la présence du noeud dans l'arbre
+Bool haveNode(int val, BinaryTree* tree);
+// Verifie si la valeur val est une feuille dans l'arbre
+Bool isLeafInTree(int val, BinaryTree* tree);
 // Vérifie si l'arbre est vide
 Bool isEmpty(BinaryTree *tree);
 // Vérifie si l'arbre est équilibré
