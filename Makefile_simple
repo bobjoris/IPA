@@ -1,0 +1,22 @@
+#
+# makefile 
+# ajout de variables
+#
+
+CC=gcc
+
+main : main.o binarytree.o binarytree_sdl.o utils.o
+  $(CC) -o main main.o binarytree.o binarytree_sdl.o utils.o `sdl-config --cflags --libs` -lSDL_ttf 
+
+main.o : main.c
+	$(CC) -c main.c 
+
+binarytree.o : binarytree.c
+	$(CC) -c binarytree.c
+
+binarytree_sdl.o : binarytree_sdl.c
+	$(CC) -c binarytree_sdl.c
+
+utils.o : utils.c
+	$(CC) -c utils.c
+
