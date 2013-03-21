@@ -147,6 +147,22 @@ void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pix
     }
 }
 
+void drawText(SDL_Surface *surface, int x, int y, int size,char* str)
+{
+     // Initialisation du texte
+    TTF_Font *font = NULL;
+    SDL_Surface *texte;
+    SDL_Rect position;
+    SDL_Color blackColor = {0, 0, 0};
+    
+    TTF_Init();
+    font = TTF_OpenFont("font.ttf", size);
+    texte = TTF_RenderText_Blended(font, str, blackColor);
+    position.x = x - 5; position.y = y - 15;
+    //Affichage du texte
+    SDL_BlitSurface(texte, NULL, surface, &position); 
+}
+
 /*void AnimOneNode(SDL_Surface *surface, int radius, Uint32 pixel, int node, int x1, int y1, int x2, int y2){
 	int x=x1;
 	int y=y1;

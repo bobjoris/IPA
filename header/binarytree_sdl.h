@@ -34,5 +34,7 @@ void drawLine(SDL_Surface *surface, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, 
 // Dessine un cercle sur la surface
 void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pixel);
 
+void drawText(SDL_Surface *surface, int x, int y, int size, char* str);
+
 #endif	/* BINARYTREE_SDL_H */
 

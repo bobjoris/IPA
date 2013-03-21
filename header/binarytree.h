@@ -28,9 +28,12 @@ BinaryTree* createNode(int val);
 BinaryTree* createNodeWithChilds(BinaryTree *left, int val, BinaryTree *right);
 // Insère un noeud dans l'arbre passé en paramètre
 BinaryTree* insertNode(int val, BinaryTree *tree);
+//Insère un noeud avec une rotation finale
+BinaryTree* insertNodeWithRotation(int val, BinaryTree *tree);
 // Supprime une feuille dans un arbre
 BinaryTree* deleteLeaf(int val, BinaryTree *tree);
-
+//Copie d'un arbre
+BinaryTree* copyTree(BinaryTree * tree);
 
 /*
  * Accesseurs

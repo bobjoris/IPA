@@ -17,8 +17,9 @@
 #include "binarytree_sdl.h"
 
 BinaryTree* BinaryTreeTest();
+
 SDL_Surface* initSDLWindow();
-void pause();
+void waitEvent(SDL_Surface*, BinaryTree *tabTree[]);
 
 #endif	/* MAIN_H */
 

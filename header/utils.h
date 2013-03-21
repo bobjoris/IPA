@@ -16,4 +16,3 @@ typedef enum {FALSE, TRUE}Bool;
 int max(int, int);
 
 #endif	/* UTILS_H */
-

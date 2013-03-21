@@ -58,7 +58,24 @@ BinaryTree* insertNode(int val, BinaryTree *tree)
     else if(val > nodeValue(tree))
         tree->Right = insertNode(val, tree->Right);
     
-    return rotate(tree);
+    return tree;
+}
+
+BinaryTree *insertNodeWithRotation(int val, BinaryTree* tree)
+{
+    return transformBTree(insertNode(val, tree));
+}
+
+BinaryTree* copyTree(BinaryTree * tree){
+    BinaryTree* res = malloc(sizeof(BinaryTree));
+    
+    res->value = nodeValue(tree);
+    if(leftChild(tree) != NULL)
+        res->Left = copyTree(leftChild(tree));
+    if(rightChild(tree) != NULL)
+        res->Right = copyTree(rightChild(tree));
+    
+    return res;
 }
 
 BinaryTree* deleteLeaf(int val, BinaryTree *tree)
@@ -73,7 +90,7 @@ BinaryTree* deleteLeaf(int val, BinaryTree *tree)
 		}
 		else
 		{
-			res=CreateNodeWithChilds(deleteLeaf(val,leftChild(tree)),nodeValue(tree),deleteLeaf(val,rightChild(tree)));
+			res=createNodeWithChilds(deleteLeaf(val,leftChild(tree)),nodeValue(tree),deleteLeaf(val,rightChild(tree)));
 		}
 	}
 	else
@@ -206,6 +223,7 @@ BinaryTree* transformBTree(BinaryTree *tree)
     {
         tree->Left = transformBTree(tree->Left);
         tree->Right = transformBTree(tree->Right);
+        
         tree = rotate(tree);
     }
     
@@ -213,7 +231,7 @@ BinaryTree* transformBTree(BinaryTree *tree)
 }
 
 /*
- * Affichage préfixé
+ * Affichage préfixés
  */
 void preorderTraversal(BinaryTree  *tree)
 {
