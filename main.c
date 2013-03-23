@@ -14,13 +14,13 @@ int main(int argc, char** argv) {
 
     SDL_Surface *screen;
     BinaryTree *tree = NULL;
-    
-    BinaryTree *tabTree[16];
 
-    int val[] = {76, 7, 9, 14, 12, 72, 54, 50};
+    BinaryTree * tabTree[16];
+
+    //int val[] = {76, 7, 9, 14, 12, 72, 54, 50};
     int i = 0, j = 0;
     for (i; i < 8; i++) {
-        tree = insertNode(val[i], tree);
+        tree = insertNode(i, tree);
 
         tabTree[j++] = copyTree(tree);
 
@@ -29,8 +29,9 @@ int main(int argc, char** argv) {
     }
 
     screen = initSDLWindow();
-    waitEvent(screen, tabTree);
-    SDL_Quit(); 
+    editEvent(screen);
+    //waitEvent(screen, tabTree);
+    SDL_Quit();
 
 
     return (EXIT_SUCCESS);
@@ -39,45 +40,6 @@ int main(int argc, char** argv) {
 BinaryTree* BinaryTreeTest() {
     BinaryTree *treeL, *treeR, *tree;
 
-
-    /* int i=0;
-     tree = insertNode(1, NULL);
-     for(i = 2; i < 10; i++)
-     {
-         tree = insertNode(i, tree);
-     } */
-
-    treeL = createNode(17);
-    treeL->Left = createNode(9);
-    treeL->Left->Right = createNode(14);
-    treeL->Left->Right->Left = createNode(12);
-    treeL->Right = createNode(23);
-    treeL->Right->Left = createNode(19);
-
-    treeR = createNode(76);
-    treeR->Left = createNode(54);
-    treeR->Left->Right = createNode(72);
-    treeR->Left->Right->Left = createNode(67);
-
-    tree = createNodeWithChilds(treeL, 50, treeR);
-
-    /* tree = insertNode(7, NULL); 
-    
-
-     tree = insertNode(9, tree);
-
-     tree = insertNode(14, tree);
-     tree = insertNode(12, tree);
-     tree = insertNode(76, tree);
-     tree = insertNode(54, tree);
-     tree = insertNode(72, tree);
-     tree = insertNode(50, tree); */
-
-    printf("%d\n", isBTree(tree));
-    preorderTraversal(tree);
-
-    tree = transformBTree(tree);
-
     return tree;
 }
 
@@ -85,7 +47,7 @@ SDL_Surface* initSDLWindow() {
     SDL_Surface *screen;
 
     SDL_Init(SDL_INIT_VIDEO);
-    //SDL_EnableKeyRepeat(10, 10);
+    SDL_EnableKeyRepeat(100, 100);
     screen = SDL_SetVideoMode(1300, 768, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
 
     if (screen == NULL) {
@@ -100,6 +62,71 @@ SDL_Surface* initSDLWindow() {
     SDL_WM_SetCaption("IPA : Rotation sur les Arbres Binaires", NULL);
 
     return screen;
+}
+
+int displayMenu() {
+    int res = 0;
+    printf("\n**Menu**\n--------------\n\n");
+    printf("1. Ajouter un noeud\n");
+    printf("2. Supprimer un noeud\n");
+    printf("3. Parcourir les étapes\n\n");
+
+    printf("Votre choix : ");
+    scanf("%d", &res);
+
+    return res;
+}
+
+void editEvent(SDL_Surface *screen) {
+    BinaryTree *tree = NULL;
+    BinaryTree *tabTree[128] = {0};
+
+    int posX = 700, posY = 50, i = 0;
+    int menuChoice = 0, option = 0;
+    Bool endWhile = FALSE;
+
+    do {
+        menuChoice = displayMenu();
+
+        switch (menuChoice) {
+            case 1:
+                endWhile = FALSE;
+                while (!endWhile) {
+                    printf("\nValeur du noeud : ");
+                    scanf("%d", &option);
+
+                    if(option < 0)
+                        endWhile = TRUE;
+                    else
+                    {
+                        tree = insertNode(option, tree);
+                        tabTree[i++] = copyTree(tree);
+                        tree = transformBTree(tree);
+                        tabTree[i++] = copyTree(tree);
+                    }
+
+                    clearScreen(screen);
+                    drawTree(screen, tabTree[i - 1], posX, posY, 30, height(tree));
+                    SDL_Flip(screen);
+                }
+                break;
+            case 2:
+                printf("\nValeur du noeud : ");
+                scanf("%d", &option);
+                tree = deleteNode(option, tree);
+                tabTree[i++] = copyTree(tree);
+                
+                clearScreen(screen);
+                drawTree(screen, tabTree[i - 1], posX, posY, 30, height(tree));
+                SDL_Flip(screen);
+                break;
+            case 3:
+                waitEvent(screen, tabTree);
+                break;
+
+        }
+
+    } while (menuChoice != 0);
 }
 
 void waitEvent(SDL_Surface *screen, BinaryTree *tabTree[]) {
@@ -122,23 +149,23 @@ void waitEvent(SDL_Surface *screen, BinaryTree *tabTree[]) {
                         continuer = 0;
                         break;
                     case SDLK_DOWN: // Flèche bas
-                        posY++;
+                        posX -= 10;
                         break;
-                    case SDLK_UP : // Flèche du hat
-                        posY--;
+                    case SDLK_UP: // Flèche du hat
+                        posX += 10;
                         break;
-                    case SDLK_LEFT :
+                    case SDLK_LEFT:
                         index--;
                         break;
-                    case SDLK_RIGHT :
+                    case SDLK_RIGHT:
                         index++;
                         break;
                 }
                 break;
         }
         clearScreen(screen);
-        posX = ( posX < 30) ? 30 : posX;
-        posY = ( posX < 30) ? 30 : posY;
+        posX = (posX < 30) ? 30 : posX;
+        posY = (posX < 30) ? 30 : posY;
         index = (index < 0) ? 0 : index;
         tree = tabTree[index];
         sprintf(textDisplay, "Indice : %d", index);

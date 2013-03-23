@@ -19,6 +19,8 @@
 BinaryTree* BinaryTreeTest();
 
 SDL_Surface* initSDLWindow();
+int displayMenu();
+void editEvent(SDL_Surface*);
 void waitEvent(SDL_Surface*, BinaryTree *tabTree[]);
 
 #endif	/* MAIN_H */

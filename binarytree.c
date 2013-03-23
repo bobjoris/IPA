@@ -69,11 +69,16 @@ BinaryTree *insertNodeWithRotation(int val, BinaryTree* tree)
 BinaryTree* copyTree(BinaryTree * tree){
     BinaryTree* res = malloc(sizeof(BinaryTree));
     
-    res->value = nodeValue(tree);
+    res->value = tree->value;
     if(leftChild(tree) != NULL)
-        res->Left = copyTree(leftChild(tree));
+        res->Left = copyTree(tree->Left);
+    else
+        res->Left = NULL;
+    
     if(rightChild(tree) != NULL)
-        res->Right = copyTree(rightChild(tree));
+        res->Right = copyTree(tree->Right);
+    else
+        res->Right = NULL;
     
     return res;
 }
