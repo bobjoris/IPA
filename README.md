@@ -7,11 +7,11 @@ Projet représentation graphique des Arbres en C
 ###TO DO
 - [X] Implémentation des arbres (arbre binaires simple, contenu noeud : int)
 - [X] Ajout de noeud dans les arbres
-- [ ] Suppression de noeud dans les arbres
+- [/] Suppression de noeud dans les arbres (à tester)
 - [X] Développement de l'algorithme de rotation des noeuds
 - [X] Initialisation de la fenêtre de rendue en SDL
 - [X] Représentation graphique des arbres
-- [ ] Animation de la rotation
+- [X] Animation de la rotation
 
 - [ ] Rapport
  
