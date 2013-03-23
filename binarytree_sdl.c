@@ -9,33 +9,38 @@ void clearScreen(SDL_Surface *surface) {
 
 void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSize, int offsetCoeff) {
     if (tree != NULL) {
+        int nodeDiff = nodeDifference(tree);
         // Initialisation du texte
-        TTF_Font *font = NULL;
-        SDL_Surface *texte;
         char strNodeValue[255];
-        SDL_Rect position;
-        SDL_Color blackColor = {0, 0, 0};
-
-        TTF_Init();
-        font = TTF_OpenFont("font.ttf", 13);
+        
         sprintf(strNodeValue, "%d", nodeValue(tree));
-        texte = TTF_RenderText_Blended(font, strNodeValue, blackColor);
-        position.x = x - 5;
-        position.y = y - 15;
         //Affichage du texte
-        SDL_BlitSurface(texte, NULL, surface, &position);
+        drawText(surface, x - 5, y - 15, 13, strNodeValue);
 
-        position.y += 15;
         sprintf(strNodeValue, "%d", nodeDifference(tree));
-        texte = TTF_RenderText_Blended(font, strNodeValue, blackColor);
-        SDL_BlitSurface(texte, NULL, surface, &position);
+        drawText(surface, x - 5, y, 13, strNodeValue);
 
         // Calcul du déport des cercles des enfants
         int xOffset = circleSize + abs((circleSize * 2) * offsetCoeff);
         int yOffset = circleSize + abs((circleSize / 2) * offsetCoeff);
 
         // Sélection de la couleur et affichage du cercle
-        Uint32 color = SDL_MapRGB(surface->format, 0, 0, 0);
+        Uint32 color, colorLeft, colorRight;
+        color = SDL_MapRGB(surface->format, 0, 0, 0);
+        colorLeft = SDL_MapRGB(surface->format, 0, 0, 0);
+        colorRight = SDL_MapRGB(surface->format, 0, 0, 0);
+        
+        
+        if(nodeDiff == 2 || nodeDiff == -2)
+        {
+                color = SDL_MapRGB(surface->format, 255, 0, 0);
+                
+                if(nodeDiff > 0)
+                    colorRight = SDL_MapRGB(surface->format, 255, 0, 0);
+                else
+                    colorLeft = SDL_MapRGB(surface->format, 255, 0, 0);              
+        }
+        
         drawCircle(surface, x, y, circleSize, color);
 
         if (leftChild(tree) != NULL) {
@@ -44,7 +49,7 @@ void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSi
             float y1 = y + (circleSize) * sin(120 * (M_PI / 180));
             float x2 = (x - xOffset) + (circleSize) * cos(300 * (M_PI / 180));
             float y2 = (y + yOffset) + (circleSize) * sin(300 * (M_PI / 180));
-            drawLine(surface, (int) x1, (int) y1, (int) x2, (int) y2, color);
+            drawLine(surface, (int) x1, (int) y1, (int) x2, (int) y2, colorLeft);
             drawTree(surface, leftChild(tree), x - xOffset, y + yOffset, circleSize, offsetCoeff - 1);
         }
         if (rightChild(tree) != NULL) {
@@ -53,15 +58,15 @@ void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSi
             float y1 = y + (circleSize) * sin(60 * (M_PI / 180));
             float x2 = (x + xOffset) + (circleSize) * cos(250 * (M_PI / 180));
             float y2 = (y + yOffset) + (circleSize) * sin(250 * (M_PI / 180));
-            drawLine(surface, (int) x1, (int) y1, (int) x2, (int) y2, color);
+            drawLine(surface, (int) x1, (int) y1, (int) x2, (int) y2, colorRight);
             drawTree(surface, rightChild(tree), x + xOffset, y + yOffset, circleSize, offsetCoeff - 1);
         }
     }
 }
 
-void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
+void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixelColor) {
     Uint8 *target_pixel = (Uint8 *) surface->pixels + y * surface->pitch + x * 4;
-    *(Uint32 *) target_pixel = pixel;
+    *(Uint32 *) target_pixel = pixelColor;
 }
 
 void drawLine(SDL_Surface *surface, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 color) {
@@ -99,7 +104,7 @@ void drawLine(SDL_Surface *surface, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, 
     setPixel(surface, x1, y1, color);
 }
 
-void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pixel) {
+void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pixelColor) {
     double error = (double) -radius;
     double x = (double) radius - 0.5;
     double y = (double) 0.5;
@@ -107,22 +112,22 @@ void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pix
     double cy = n_cy - 0.5;
 
     while (x >= y) {
-        setPixel(surface, (int) (cx + x), (int) (cy + y), pixel);
-        setPixel(surface, (int) (cx + y), (int) (cy + x), pixel);
+        setPixel(surface, (int) (cx + x), (int) (cy + y), pixelColor);
+        setPixel(surface, (int) (cx + y), (int) (cy + x), pixelColor);
 
         if (x != 0) {
-            setPixel(surface, (int) (cx - x), (int) (cy + y), pixel);
-            setPixel(surface, (int) (cx + y), (int) (cy - x), pixel);
+            setPixel(surface, (int) (cx - x), (int) (cy + y), pixelColor);
+            setPixel(surface, (int) (cx + y), (int) (cy - x), pixelColor);
         }
 
         if (y != 0) {
-            setPixel(surface, (int) (cx + x), (int) (cy - y), pixel);
-            setPixel(surface, (int) (cx - y), (int) (cy + x), pixel);
+            setPixel(surface, (int) (cx + x), (int) (cy - y), pixelColor);
+            setPixel(surface, (int) (cx - y), (int) (cy + x), pixelColor);
         }
 
         if (x != 0 && y != 0) {
-            setPixel(surface, (int) (cx - x), (int) (cy - y), pixel);
-            setPixel(surface, (int) (cx - y), (int) (cy - x), pixel);
+            setPixel(surface, (int) (cx - x), (int) (cy - y), pixelColor);
+            setPixel(surface, (int) (cx - y), (int) (cy - x), pixelColor);
         }
 
         error += y;
@@ -147,8 +152,8 @@ void drawText(SDL_Surface *surface, int x, int y, int size, char* str) {
     TTF_Init();
     font = TTF_OpenFont("font.ttf", size);
     texte = TTF_RenderText_Blended(font, str, blackColor);
-    position.x = x - 5;
-    position.y = y - 15;
+    position.x = x;
+    position.y = y;
     //Affichage du texte
     SDL_BlitSurface(texte, NULL, surface, &position);
 }

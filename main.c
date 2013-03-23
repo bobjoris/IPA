@@ -13,26 +13,9 @@
 int main(int argc, char** argv) {
 
     SDL_Surface *screen;
-    BinaryTree *tree = NULL;
-
-    BinaryTree * tabTree[16];
-
-    //int val[] = {76, 7, 9, 14, 12, 72, 54, 50};
-    int i = 0, j = 0;
-    for (i; i < 8; i++) {
-        tree = insertNode(i, tree);
-
-        tabTree[j++] = copyTree(tree);
-
-        tree = transformBTree(tree);
-        tabTree[j++] = copyTree(tree);
-    }
-
     screen = initSDLWindow();
     editEvent(screen);
-    //waitEvent(screen, tabTree);
     SDL_Quit();
-
 
     return (EXIT_SUCCESS);
 }
@@ -70,6 +53,7 @@ int displayMenu() {
     printf("1. Ajouter un noeud\n");
     printf("2. Supprimer un noeud\n");
     printf("3. Parcourir les étapes\n\n");
+    printf("5. Mode démo\n0. Quitter\n\n");
 
     printf("Votre choix : ");
     scanf("%d", &res);
@@ -81,9 +65,12 @@ void editEvent(SDL_Surface *screen) {
     BinaryTree *tree = NULL;
     BinaryTree *tabTree[128] = {0};
 
-    int posX = 700, posY = 50, i = 0;
+    int posX = 700, posY = 50, i = 0, j=0;
     int menuChoice = 0, option = 0;
     Bool endWhile = FALSE;
+    
+    int val[] = {1,2,3,4,5,6,7,8,9,10};
+     int tabSize = sizeof(val) / sizeof(int);
 
     do {
         menuChoice = displayMenu();
@@ -116,11 +103,25 @@ void editEvent(SDL_Surface *screen) {
                 tree = deleteNode(option, tree);
                 tabTree[i++] = copyTree(tree);
                 
+                tree = transformBTree(tree);
+                tabTree[i++] = copyTree(tree);
+                
                 clearScreen(screen);
                 drawTree(screen, tabTree[i - 1], posX, posY, 30, height(tree));
                 SDL_Flip(screen);
                 break;
             case 3:
+                waitEvent(screen, tabTree);
+                break;
+            case 5:
+                i = 0;
+                for(j = 0; j < tabSize; j++)
+                {
+                    tree = insertNode(val[j], tree);
+                        tabTree[i++] = copyTree(tree);
+                        tree = transformBTree(tree);
+                        tabTree[i++] = copyTree(tree);
+                }
                 waitEvent(screen, tabTree);
                 break;
 
