@@ -86,23 +86,23 @@ BinaryTree* copyTree(BinaryTree * tree){
 int numberOfLeaf(BinaryTree* tree, int val)
 {
 	int res;
-	if(nodeValue(tree)==val)
+	if(nodeValue(tree)==val)//une fois le noeud touvé
 	{
-		if(rightChild(tree)==NULL && leftChild(tree)==NULL)
+		if(rightChild(tree)==NULL && leftChild(tree)==NULL)//cas d'une feuille
 		{res=0;}
-		else if(rightChild(tree)==NULL && leftChild(tree)!=NULL)
+		else if(rightChild(tree)==NULL && leftChild(tree)!=NULL)//cas d'un noeud à 1 fils
 		{res=1;}
-		else if(rightChild(tree)!=NULL && leftChild(tree)==NULL)
+		else if(rightChild(tree)!=NULL && leftChild(tree)==NULL)//cas d'un noeud à 1 fils
 		{res=1;}
-		else
+		else//cas d'un noeud à 2 fils
 		{res=2;}
 	}
-	else
+	else//on cherche le noeud de valeur val
 	{
 		if(val>=nodeValue(tree))
-		{res=numberOfLeaf(rightChild(tree),val);}
+		{res=numberOfLeaf(rightChild(tree),val);}//en se deplacant à droite
 		else
-		{res=numberOfLeaf(leftChild(tree),val);}
+		{res=numberOfLeaf(leftChild(tree),val);}//en se deplacant à gauche
 	}
 	return res;
 }
@@ -112,11 +112,11 @@ int maxNode(BinaryTree* tree)
 	int res;
 	if(rightChild(tree)!=NULL)
 	{
-		res=maxNode(rightChild(tree));
+		res=maxNode(rightChild(tree));//la valeur maximale n'st pas encore atteinte, donc on fait un appel recursif
 	}
 	else
 	{
-		res=nodeValue(tree);	
+		res=nodeValue(tree);//on a atteint la valeur max	
 	}
 	return res;
 }
@@ -126,11 +126,11 @@ BinaryTree* setNode(int val, int intoval, BinaryTree* tree)
 	BinaryTree *res=NULL;
 	res = malloc(sizeof(BinaryTree));
 	if(tree!=NULL){
-	if(nodeValue(tree)==val)
+		if(nodeValue(tree)==val)//une fois le noeud trouvé, on remplace sa valeur
 		{
 			tree->value=intoval;
 		}
-		else
+		else//sinon on parcoure les sous arbres droits et gauches
 		{
 			setNode(val,intoval,rightChild(tree));
 			setNode(val,intoval,leftChild(tree));
@@ -141,7 +141,8 @@ BinaryTree* setNode(int val, int intoval, BinaryTree* tree)
 
 BinaryTree* switchNode(int val1, int val2, BinaryTree* tree)
 {
-	int intoval2=1000;
+	//on utilise 3 fois la fonction setNode pour faire l'échange de valeurs
+	int intoval2=1000;//valeur intermédiaire de remplacement d'un noeud
 	setNode(val1, intoval2, tree);
 	setNode(val2, val1, tree);
 	setNode(intoval2, val2, tree); 
@@ -152,18 +153,18 @@ BinaryTree* deleteLeaf(int val, BinaryTree *tree)
 {
 	BinaryTree *res=NULL;
 	res = malloc(sizeof(BinaryTree));
-	if((haveNode(val,tree))&&(isLeafInTree(val,tree)))
+	if((haveNode(val,tree))&&(isLeafInTree(val,tree)))//condition : le noeud est present et c'est une feuille
 	{
-		if(nodeValue(tree)==val)
+		if(nodeValue(tree)==val)//lorsque la valeur est trouvée, on supprime la feuille
 		{
 			res=NULL;		
 		}
-		else
+		else// sinon on cherche dans les sous arbres droits et gauches
 		{
 			res=createNodeWithChilds(deleteLeaf(val,leftChild(tree)),nodeValue(tree),deleteLeaf(val,rightChild(tree)));
 		}
 	}
-	else
+	else//la valeur n'est pas présente, on retourne l'arbre d'entrée
 	{
 		res=tree;
 	}
@@ -174,25 +175,25 @@ BinaryTree* deleteNode1(int val, BinaryTree *tree)
 {
 	BinaryTree *res=NULL;
 	res = malloc(sizeof(BinaryTree));
-	if(haveNode(val,tree))
+	if(haveNode(val,tree))//condition : le noeud est présent
 	{
-		if(nodeValue(tree)==val)
+		if(nodeValue(tree)==val)// si le noeud est trouvée
 		{
-			if(rightChild(tree)==NULL)
+			if(rightChild(tree)==NULL)// sous arbre droit nul on retourne le sous arbre gauche
 			{
 				res=leftChild(tree);
 			}
-			else
+			else// sous arbre gauche nul on retourne le sous arbre droit
 			{
 				res=rightChild(tree);
 			}		
 		}
-		else
+		else// sinon on cherche dans les sous arbres droits et gauches
 		{
 			res=createNodeWithChilds(deleteNode1(val,leftChild(tree)),nodeValue(tree),deleteNode1(val,rightChild(tree)));
 		}
 	}
-	else
+	else// si le noeud n'est pas présent, on retourne l'arbre d'entrée
 	{
 		res=tree;
 	}
@@ -203,11 +204,12 @@ BinaryTree* deleteNode2(int val, BinaryTree *tree)
 {
 	BinaryTree *res=NULL;
 	res = malloc(sizeof(BinaryTree));
-	if(haveNode(val,tree))
+	if(haveNode(val,tree))//condition : le noeud est présent
 	{
+		//on supprime le noeud val dans l'arbre ou a été effectue un échange entre val et le noeud de valeur maximale dans le sous arbre gauche
 		res=deleteNode1(val,switchNode(val,maxNode(leftChild(tree)),tree));
 	}
-	else
+	else// si le noeud n'est pas présent, on retourne l'arbre d'entrée
 	{
 		res=tree;
 	}
@@ -216,9 +218,9 @@ BinaryTree* deleteNode2(int val, BinaryTree *tree)
 
 BinaryTree* deleteNode(int val, BinaryTree *tree)
 {
-	if(haveNode(val,tree))
+	if(haveNode(val,tree))//condition : le noeud est présent
 	{
-		switch(numberOfLeaf(tree,val)){
+		switch(numberOfLeaf(tree,val)){//test du nombre de fils et appel de la fonction adequate
 			case 0:
 			return deleteLeaf(val,tree);
 			break;
@@ -275,24 +277,24 @@ BinaryTree* rightChild(BinaryTree *tree)
 Bool haveNode(int val, BinaryTree* tree)
 {
 	Bool res;
-	if(isLeaf(tree))
+	if(isLeaf(tree))//si l'arbre est une feuille
 	{
-		if(nodeValue(tree)==val)
+		if(nodeValue(tree)==val)//si la feuille est presente, on retourne vrai
 		{
 			res=TRUE;
 		}
-		else 
+		else // sinon faux
 		{
 			res=FALSE;
 		}
 	}
 	else
 	{
-		if(nodeValue(tree)==val)
+		if(nodeValue(tree)==val)//si le noeud est present, on retourne vrai
 		{
 			res=TRUE;
 		}
-		else
+		else// appel recursif : la valeur est presente dans le sous arbre droit OU dans le sous arbre gauche
 		{
 			res=(haveNode(val,rightChild(tree)))||(haveNode(val,leftChild(tree)));
 		}
