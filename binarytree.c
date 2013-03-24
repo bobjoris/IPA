@@ -204,12 +204,19 @@ BinaryTree* deleteNode2(int val, BinaryTree *tree)
 {
 	BinaryTree *res=NULL;
 	res = malloc(sizeof(BinaryTree));
-	if(haveNode(val,tree))//condition : le noeud est présent
-	{
-		//on supprime le noeud val dans l'arbre ou a été effectue un échange entre val et le noeud de valeur maximale dans le sous arbre gauche
-		res=deleteNode1(val,switchNode(val,maxNode(leftChild(tree)),tree));
+	if(haveNode(val,tree))//condition : le noeud est present
+	{	
+		if(nodeValue(tree)==val)// on se deplace dans le branches de l'arbre
+		{
+			// on supprime le noeud val dans l'arbre ou a été échangé val et le noeud de valeur maximale dans le sous arbre gauche
+			res=deleteNode1(val,switchNode(val,maxNode(leftChild(tree)),tree));	
+		}
+		else// appel recursif
+		{
+			res=createNodeWithChilds(deleteNode2(val,leftChild(tree)),nodeValue(tree),deleteNode2(val,rightChild(tree)));
+		}
 	}
-	else// si le noeud n'est pas présent, on retourne l'arbre d'entrée
+	else
 	{
 		res=tree;
 	}
