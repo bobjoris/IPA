@@ -110,20 +110,13 @@ int numberOfLeaf(BinaryTree* tree, int val)
 int maxNode(BinaryTree* tree)
 {
 	int res;
-	if(rightChild(tree)==NULL)
-	{
-		if(leftChild(tree)!=NULL)
-		{
-			res=maxNode(leftChild(tree));
-		}
-		else
-		{
-			res=nodeValue(tree);
-		}
-	}
 	if(rightChild(tree)!=NULL)
 	{
 		res=maxNode(rightChild(tree));
+	}
+	else
+	{
+		res=nodeValue(tree);	
 	}
 	return res;
 }
@@ -172,7 +165,7 @@ BinaryTree* deleteLeaf(int val, BinaryTree *tree)
 	}
 	else
 	{
-		return tree;
+		res=tree;
 	}
 	return res;
 }
@@ -201,7 +194,7 @@ BinaryTree* deleteNode1(int val, BinaryTree *tree)
 	}
 	else
 	{
-		return tree;
+		res=tree;
 	}
 	return res;
 }
@@ -223,23 +216,30 @@ BinaryTree* deleteNode2(int val, BinaryTree *tree)
 
 BinaryTree* deleteNode(int val, BinaryTree *tree)
 {
-	switch(numberOfLeaf(tree,val)){
-		case 0:
-		return deleteLeaf(val,tree);
-		break;
+	if(haveNode(val,tree))
+	{
+		switch(numberOfLeaf(tree,val)){
+			case 0:
+			return deleteLeaf(val,tree);
+			break;
+				
+			case 1:
+			return deleteNode1(val,tree);
+			break;
 			
-		case 1:
-		return deleteNode1(val,tree);
-		break;
-		
-		case 2:
-		return deleteNode2(val,tree);
-		break;
-		
-		default:
+			case 2:
+			return deleteNode2(val,tree);
+			break;
+			
+			default:
+			return tree;
+			break;
+		}
+	}
+	else
+	{
 		return tree;
-		break;
-	}			
+	}
 }			
 		
 
