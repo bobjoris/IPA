@@ -54,7 +54,24 @@ void drawTree(SDL_Surface *surface, BinaryTree *tree, int treeDepth, int depth, 
     //px = ligne départ
     // x = ligne d'arrivé
     if (px != 0) {
-        drawLine(surface, px, py, (int) x, (int) y, colorLine);
+        if (index % 2 == 0) {
+            double x1, y1, x2, y2;
+            x1 = px + (radius) * cos(60 * (M_PI / 180));
+            y1 = py + (radius) * sin(60 * (M_PI / 180));
+            x2 = x + (radius) * cos(250 * (M_PI / 180));
+            y2 = y + (radius) * sin(250 * (M_PI / 180));
+
+            drawLine(surface, (int) x1, (int) y1, (int) x2, (int) y2, colorLine);
+        } else {
+            double x1, y1, x2, y2;
+            x1 = px + (radius) * cos(120 * (M_PI / 180));
+            y1 = py + (radius) * sin(120 * (M_PI / 180));
+            x2 = x + (radius) * cos(300 * (M_PI / 180));
+            y2 = y + (radius) * sin(300 * (M_PI / 180));
+
+            drawLine(surface, (int) x1, (int) y1, (int) x2, (int) y2, colorLine);
+        }
+
     }
 
     drawTree(surface, tree->Left, treeDepth + 1, depth, (int) x, (int) y, index * 2 - 1, nodeDiff);
