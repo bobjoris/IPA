@@ -172,5 +172,6 @@ void drawText(SDL_Surface *surface, int x, int y, int size, char* str) {
     SDL_BlitSurface(texte, NULL, surface, &position);
 
     TTF_CloseFont(font);
+    free(texte);
     TTF_Quit();
 }
