@@ -7,61 +7,58 @@ void clearScreen(SDL_Surface *surface) {
     SDL_FillRect(surface, NULL, 0xfffffff);
 }
 
-void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSize, int offsetCoeff) {
-    if (tree != NULL) {
-        int nodeDiff = nodeDifference(tree);
-        // Initialisation du texte
-        char strNodeValue[255];
-        
-        sprintf(strNodeValue, "%d", nodeValue(tree));
-        //Affichage du texte
-        drawText(surface, x - 5, y - 15, 13, strNodeValue);
+void drawTree(SDL_Surface *surface, BinaryTree *tree, int treeDepth, int depth, int px, int py, int index, int prevDiff) {
 
-        sprintf(strNodeValue, "%d", nodeDifference(tree));
-        drawText(surface, x - 5, y, 13, strNodeValue);
-
-        // Calcul du déport des cercles des enfants
-        int xOffset = circleSize + abs((circleSize * 2) * offsetCoeff);
-        int yOffset = circleSize + abs((circleSize / 2) * offsetCoeff);
-
-        // Sélection de la couleur et affichage du cercle
-        Uint32 color, colorLeft, colorRight;
-        color = SDL_MapRGB(surface->format, 0, 0, 0);
-        colorLeft = SDL_MapRGB(surface->format, 0, 0, 0);
-        colorRight = SDL_MapRGB(surface->format, 0, 0, 0);
-        
-        
-        if(nodeDiff == 2 || nodeDiff == -2)
-        {
-                color = SDL_MapRGB(surface->format, 255, 0, 0);
-                
-                if(nodeDiff > 0)
-                    colorRight = SDL_MapRGB(surface->format, 255, 0, 0);
-                else
-                    colorLeft = SDL_MapRGB(surface->format, 255, 0, 0);              
-        }
-        
-        drawCircle(surface, x, y, circleSize, color);
-
-        if (leftChild(tree) != NULL) {
-            // Calcul des coordonnées de l'arete
-            float x1 = x + (circleSize) * cos(120 * (M_PI / 180));
-            float y1 = y + (circleSize) * sin(120 * (M_PI / 180));
-            float x2 = (x - xOffset) + (circleSize) * cos(300 * (M_PI / 180));
-            float y2 = (y + yOffset) + (circleSize) * sin(300 * (M_PI / 180));
-            drawLine(surface, (int) x1, (int) y1, (int) x2, (int) y2, colorLeft);
-            drawTree(surface, leftChild(tree), x - xOffset, y + yOffset, circleSize, offsetCoeff - 1);
-        }
-        if (rightChild(tree) != NULL) {
-            // Calcul des coordonnées de l'arete
-            float x1 = x + (circleSize) * cos(60 * (M_PI / 180));
-            float y1 = y + (circleSize) * sin(60 * (M_PI / 180));
-            float x2 = (x + xOffset) + (circleSize) * cos(250 * (M_PI / 180));
-            float y2 = (y + yOffset) + (circleSize) * sin(250 * (M_PI / 180));
-            drawLine(surface, (int) x1, (int) y1, (int) x2, (int) y2, colorRight);
-            drawTree(surface, rightChild(tree), x + xOffset, y + yOffset, circleSize, offsetCoeff - 1);
-        }
+    if (isEmpty(tree)) {
+        return;
     }
+
+    double x, y, rH, rL, radius;
+    int nodeDiff = nodeDifference(tree);
+
+    rH = ((float) surface->h / (float) (depth)) / 2.0;
+    rL = ((float) surface->w / (pow(2, depth - 1))) / 3.0;
+
+    radius = min(rH, rL);
+
+
+    x = ((index * surface->w) / (pow(2, treeDepth) + 1));
+    y = ((treeDepth * surface->h) / depth) + radius;
+
+    // Sélection de la couleur et affichage du cercle
+    Uint32 color, colorLine;
+    color = SDL_MapRGB(surface->format, 0, 0, 0);
+    colorLine = SDL_MapRGB(surface->format, 0, 0, 0);
+
+
+    if (nodeDiff == 2 || nodeDiff == -2)
+        color = SDL_MapRGB(surface->format, 255, 0, 0);
+
+
+    // Si c'est la ligne droite
+    if (prevDiff == 2 && index % 2 == 0)
+        colorLine = SDL_MapRGB(surface->format, 255, 0, 0);
+    if (prevDiff == -2 && index % 2 == 1) // Si c'est la ligne gauche
+        colorLine = SDL_MapRGB(surface->format, 255, 0, 0);
+
+
+    drawCircle(surface, (int) x, (int) y, radius, color);
+
+    // Initialisation du texte
+    char strNodeValue[255];
+
+    sprintf(strNodeValue, "%d :: %d", nodeValue(tree), nodeDifference(tree));
+    //Affichage du texte
+    drawText(surface, x, y, radius / 2.5, strNodeValue);
+
+    //px = ligne départ
+    // x = ligne d'arrivé
+    if (px != 0) {
+        drawLine(surface, px, py, (int) x, (int) y, colorLine);
+    }
+
+    drawTree(surface, tree->Left, treeDepth + 1, depth, (int) x, (int) y, index * 2 - 1, nodeDiff);
+    drawTree(surface, tree->Right, treeDepth + 1, depth, (int) x, (int) y, index * 2, nodeDiff);
 }
 
 void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixelColor) {
@@ -156,59 +153,7 @@ void drawText(SDL_Surface *surface, int x, int y, int size, char* str) {
     position.y = y;
     //Affichage du texte
     SDL_BlitSurface(texte, NULL, surface, &position);
-}
 
-/*void AnimOneNode(SDL_Surface *surface, int radius, Uint32 pixel, int node, int x1, int y1, int x2, int y2){
-        int x=x1;
-        int y=y1;
-        float p=(y2-y1)/(x2-x1);//pente entre les deux points
-        int qx=0, qy=0;//pente entière
-        if(p<1){
-                //equivalent à mettre p sous la forme d'une fraction 1 sur a, on aura qx=a
-                switch((int)(log(p))){
-                        case -1:
-                        qx=(int)(10*p);
-                        break;
-			
-                        case -2:
-                        qx=(int)(100*p);
-                        break;
-			
-                        case -3:
-                        qx=(int)(1000*p);
-                        break;
-			
-                        default;
-                        qx=0;
-                        break;
-                }
-        }
-        else{
-                qy=(int)p;
-        }
-        while((x!=x2) &&(y!=y2)){
-                drawCircle(surface,x,y,radius,pixel);
-                if(qx=0){//pente >1
-                        y=y+qy;
-                        x++;
-                }
-                if(qy=0){//pente <1
-                        x=x+qx;
-                        y++;
-                }
-                if(abs(x-x2)<2 && abs(y-y2)<2){//troisième cas ou on est tres proche du point final
-                        drawCircle(surface,x2,y2,radius,pixel);
-                        x=x2;
-                        y=y2;
-                }
-        }
+    TTF_CloseFont(font);
+    TTF_Quit();
 }
-
-void printAnim2nodes (int node, BinaryTree tree1, BinaryTree tree2){
-        //Animation déplacement rectiligne du noeud présent dans les deux arbres
-        int x1=getPosition(node,tree1);//fonction getPosition à faire
-        int y1=getPosition(node,tree1);
-        int x2=getPosition(node,tree2);
-        int y2=getPosition(node,tree2);
-        AnimOneNode(surface, radius, pixel, node, x1, y1, x2, y2);
-}*/

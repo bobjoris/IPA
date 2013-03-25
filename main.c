@@ -65,7 +65,7 @@ void editEvent(SDL_Surface *screen) {
     BinaryTree *tree = NULL;
     BinaryTree *tabTree[128] = {0};
 
-    int posX = 700, posY = 50, i = 0, j=0;
+    int i = 0, j=0;
     int menuChoice = 0, option = 0;
     Bool endWhile = FALSE;
     
@@ -93,7 +93,7 @@ void editEvent(SDL_Surface *screen) {
                     }
 
                     clearScreen(screen);
-                    drawTree(screen, tabTree[i - 1], posX, posY, 30, height(tree));
+                    drawTree(screen,tabTree[i - 1],0,height(tree),0,0,1,0);
                     SDL_Flip(screen);
                 }
                 break;
@@ -107,7 +107,7 @@ void editEvent(SDL_Surface *screen) {
                 tabTree[i++] = copyTree(tree);
                 
                 clearScreen(screen);
-                drawTree(screen, tabTree[i - 1], posX, posY, 30, height(tree));
+                drawTree(screen,tabTree[i - 1],0,height(tree),0,0,1,0);
                 SDL_Flip(screen);
                 break;
             case 3:
@@ -170,7 +170,8 @@ void waitEvent(SDL_Surface *screen, BinaryTree *tabTree[]) {
         index = (index < 0) ? 0 : index;
         tree = tabTree[index];
         sprintf(textDisplay, "Indice : %d", index);
-        drawTree(screen, tree, posX, posY, 30, height(tree));
+        drawTree(screen,tree,0,height(tree),0,0,1,0);
+        //drawTree(screen, tree, posX, posY, 30, height(tree));
         drawText(screen, 700, 700, 20, textDisplay);
         SDL_Flip(screen);
     }

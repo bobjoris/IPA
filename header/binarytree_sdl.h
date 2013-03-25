@@ -23,7 +23,7 @@
 void clearScreen(SDL_Surface *surface);
 
 // Dessine un arbre
-void drawTree(SDL_Surface *surface, BinaryTree *tree, int x, int y, int circleSize, int offsetCoeff);
+void drawTree(SDL_Surface *surface, BinaryTree *tree, int treeDepth, int depth,int px, int py, int, int);
 
 // Inscrit un pixel sur la surface
 void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixelColor);
